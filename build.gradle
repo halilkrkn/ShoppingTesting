@@ -1,0 +1,35 @@
+buildscript {
+
+    ext {
+        kotlinVersion = '1.7.0'
+        navigationVersion = '2.4.0'
+        hiltVersion = '2.40.1'
+        hiltAndroidXVersion = ' 2.40'
+        pagingVersion = '3.1.0'
+        retrofitVersion = '2.9.0'
+        glideVersion = '4.12.0'
+        roomDatabaseVersion = '2.4.1'
+        lifecycleVersion = '2.4.0'
+        picassoVersion = '2.71828'
+        dataStoreVersion = '1.0.0'
+    }
+
+
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.0.4"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
