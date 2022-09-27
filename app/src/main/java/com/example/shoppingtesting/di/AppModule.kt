@@ -32,7 +32,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun defaultShoppingRepository(
+    fun provideDefaultShoppingRepository(
         dao: ShoppingDao,
         api: PixabayAPI
     ) = DefaultShoppingRepository(dao,api) as ShoppingRepository
