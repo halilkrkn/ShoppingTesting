@@ -10,9 +10,11 @@ import com.example.shoppingtesting.other.Constants
 import com.example.shoppingtesting.other.Event
 import com.example.shoppingtesting.other.Resource
 import com.example.shoppingtesting.repositories.ShoppingRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ShoppingViewModel @Inject constructor(
     private val repository: ShoppingRepository
 ) : ViewModel() {
@@ -71,7 +73,7 @@ class ShoppingViewModel @Inject constructor(
             return
         }
 
-        val shoppingItem = ShoppingItem(name,amountString,price.toFloat(),"")
+        val shoppingItem = ShoppingItem(name,amountString,price.toFloat(),_curImageUrl.value ?: "")
         insertShoppingItemIntoDb(shoppingItem)
         setCurImageUrl("")
         _insertShoppingItemStatus.postValue(Event(Resource.success(shoppingItem)))
@@ -82,11 +84,12 @@ class ShoppingViewModel @Inject constructor(
         if (imageQuery.isEmpty()) {
             return
         }
-        _images.postValue(Event(Resource.loading(null)))
+        _images.value = Event(Resource.loading(null))
         viewModelScope.launch {
             val response = repository.searchForImages(imageQuery)
             _images.value = Event(response)
         }
     }
+
 
 }

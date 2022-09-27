@@ -23,7 +23,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-
     @Singleton
     @Provides
     fun provideShoppingItemDatabase(
