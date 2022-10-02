@@ -1,12 +1,11 @@
 package com.example.shoppingtesting.data.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.shoppingtesting.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -14,16 +13,18 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
+import javax.inject.Named
 
 // Coroutine içerisindeki runTest'iyi tamamen kullanabilmek için bu annotation'u kullandık.
-@ExperimentalCoroutinesApi
 // Juni4'ü androidTest içerisinde çalıştırmamız gerektiği için burda Android Bileşenlerine ihtiyaç duydukları için emulatörde çalışır.
 // Normalde jvm üzerinde çalışmadığı için testin emülatorde çalışması gerekiyor o yüzden böyle bir annotation yazdık.
-@RunWith(AndroidJUnit4::class)
 // JUnit'e burda yazdıklarımızın birim testler olduğunu ve sadece bir tane integrated test kullanacağımız için SmallTest annotation kullandık.
 // Eğer bu sınıfta iki tane integrated test kullansaydık o zaman MediumTest kullacaktık.
 // Eğer bu sınıfta birden fazla integrated test ve ui test ile ngn testleri yazılsaydı o zaman LargeTest kullanacaktık.
+@ExperimentalCoroutinesApi
 @SmallTest
+@HiltAndroidTest // @RunWith(AndroidJUnit4::class) Buradaki annotation yerine @HiltAndroidTest annotation'ı kullanıyoruz.
 class ShoppingDaoTest {
 
 
@@ -34,7 +35,14 @@ class ShoppingDaoTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var database: ShoppingItemDatabase
+    // Burada Inject işlemlerimizi yapabilmemiz için ve hilt'i sağlıklı bir şekilde kullanabilmemiz için Hilt'in vermiş olduğu HiltAndroidRule'u tanımlamış olduk.
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    @Named("test_db") // burada yazdımız Named ile TestAppModule'deki provideInMemoryDb'in kurulumunu kastetmiş olduk inject işlemi yaparak.
+    lateinit var database: ShoppingItemDatabase
+
     private lateinit var dao: ShoppingDao
 
     // Before annotation'u bu sınıfın içerisindeki her test senaryosundan önce çalıştırılacak.
@@ -42,16 +50,9 @@ class ShoppingDaoTest {
     // Yani burdaki fonksiyonda veritabanımızı oluşturarak erişim sağlıyoruz ve database içerisindeki dao muza ulaşarak oradaki fonksiyonları test edeceğiz.
     @Before
     fun setup() {
-        // Burda inMemoryDatabaseBuilder'ı kullanıyoruz. Çünkü veritabanını oluşturmamız gerekiyor ama inMemoryDatabaseBuilder ile fake bir database oluşturuyoruz.
-        // Aslında inMemoryDatabaseBuilder ile verileri gerçek bir veritabanının içeriside değilde, yalnızca verileri Ram'de tutacağımız anlamına geliyor.
-        // Bu şekilde test daha sağlıklı ve güvenli bir şekilde yapılmış olacak. Böylelikle her test senaryosu için gerçek veritabanını oluşturulmayacak.
-        database = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            ShoppingItemDatabase::class.java
-        ).allowMainThreadQueries()
-            .build() // Bu fonk. ile veritabanına Main thread'den daha iyi erişmemize izin veriyoruz yani veritabanımıza erişimize izin veriyoruz, genellikle bir room veritabanı veya herhangi bir veritabanı kullanıyorsa
-        // bu veritabanına bir arkaplan Thread'den erişmek ve bu veri tabanı aracılığıyla yazmak ve okumak için kullanıyoruz. Çünkü thread'ler birbirini manipüle edebilir ve test işlemini zorlaştırır.
-
+        // Database'imizin kurulumunu androidTest dizinimizin içerisinde di klasöründeki AppModule'ü ile buu sınıfa inject ettik ve kuurulum işlemini yaptırmış olduk.
+        // Artık test senrayolarında kullanılabilir vaziyette.
+        hiltRule.inject()
         dao = database.shoppingDao() // database içerisindeki dao'yu çağırdıkki dao interface'imize bu şekilde ulaştık.
     }
 
