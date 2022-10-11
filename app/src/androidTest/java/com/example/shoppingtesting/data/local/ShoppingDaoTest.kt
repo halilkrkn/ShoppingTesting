@@ -3,6 +3,8 @@ package com.example.shoppingtesting.data.local
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.example.shoppingtesting.getOrAwaitValue
+import com.example.shoppingtesting.launchFragmentHiltContainer
+import com.example.shoppingtesting.ui.views.ShoppingFragment
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -61,6 +63,18 @@ class ShoppingDaoTest {
     @After
     fun teardown() {
         database.close() // veritabanımızı kapattık.
+    }
+
+
+    // Oluşturduğumuz debug dosyamız içerisine Dagger-Hilt ile test senaryolarımızın fragmentlarda kullanılması için gereken işlemleri/işlevleri yazdık.
+    // Böylelikle gerçek projedeki gibi fragmentlar içinde Hilt kurulumu yaptık ama test klasörlerinde çalışması içib com(debug) içerisinden bir HiltTestActivity class'ı oluşturduk ve debug dosyası içerisindeki androidManifest.xml dosyasına atadık.
+    // Sonra ise androidTest dosyamız içerisine de HiltExtension kotlin dosyası oluşturarak test durumlarımız için mainActivity olarak HiltActivity i gösterdik ve fragmentlarımızı da bu mainActivity'mizde kullanmamızı sağlattık.
+    // Şuan launchFragmentHiltContainer generic fonksiyonumuz sayesinde gerçek projedeki ShoppingFragment'i tanımladık.
+    // Ve inline bir fonksiyon olduğu içinde lambda fonksiyon olarak da ShoppingFragmenttaki kodlara ulaşabilmemize olanak sağladık. Yani ShoppingFragment'ta erişim sağladık.
+    @Test
+    fun testLaunchFragmentInHiltContainer(){
+        launchFragmentHiltContainer<ShoppingFragment> { 
+        }
     }
 
     // Burada test durumlarında eşzamanlılık istemiyoruz, bu yüzden MultiThread'leri coroutines ile çalıştırmayı engellemeyi deneyeceğiz.
