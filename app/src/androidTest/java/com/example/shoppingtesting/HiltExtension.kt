@@ -19,6 +19,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 // Bu fonksiyonun her yerde kullanılması için generic fonksiyon olarak oluşturuyoruz.
 // reified: Genel olarak T türünün miras olarak aldığı tüm sınıf bilgilerine erişebileceğimiz anlamına gelir.
 // Bu generic fonksyion içerisindeki fragmentFactory parametresi sayesinde böylece fragmentlarımıza constructor injection kullanmamıza izin verir.
+// Kaynaklar:
+// https://github.com/android/architecture-samples/blob/dev-hilt/app/src/androidTest/java/com/example/android/architecture/blueprints/todoapp/HiltExt.kt#L38
+// https://gist.github.com/mitchtabian/047aa7c353b6f91c6caf01e6faa1e1fe
 @ExperimentalCoroutinesApi
 inline fun <reified T : Fragment> launchFragmentHiltContainer(
     fragmentArgs: Bundle? = null,
