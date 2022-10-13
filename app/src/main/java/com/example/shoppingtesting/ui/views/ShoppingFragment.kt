@@ -5,8 +5,10 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.shoppingtesting.R
 import com.example.shoppingtesting.ui.viewmodels.ShoppingViewModel
+import kotlinx.android.synthetic.main.fragment_shopping.*
 
 class ShoppingFragment: Fragment(R.layout.fragment_shopping) {
 
@@ -15,5 +17,11 @@ class ShoppingFragment: Fragment(R.layout.fragment_shopping) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
+
+        fabAddShoppingItem.setOnClickListener{
+            findNavController().navigate(
+                ShoppingFragmentDirections.actionShoppingFragmentToAddShoppingItemFragment()
+            )
+        }
     }
 }
