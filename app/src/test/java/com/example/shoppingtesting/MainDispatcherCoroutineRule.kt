@@ -1,4 +1,4 @@
-package com
+package com.example.shoppingtesting
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

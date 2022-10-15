@@ -1,7 +1,7 @@
 package com.example.shoppingtesting.ui.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.MainDispatcherCoroutineRule
+import com.example.shoppingtesting.MainDispatcherCoroutineRule
 import com.example.getOrAwaitValue
 import com.example.shoppingtesting.other.Constants
 import com.example.shoppingtesting.other.Status
