@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/halil/Github/ShoppingTesting/app/src/main/res/drawable/ic_baseline_image_search_24.xml" value="0.337" />
         <entry key="..\:/Users/halil/Github/ShoppingTesting/app/src/main/res/layout/activity_main.xml" value="0.28442028985507245" />
         <entry key="..\:/Users/halil/Github/ShoppingTesting/app/src/main/res/layout/fragment_add_shopping_item.xml" value="0.34375" />
         <entry key="..\:/Users/halil/Github/ShoppingTesting/app/src/main/res/layout/fragment_image_pick.xml" value="0.34479166666666666" />

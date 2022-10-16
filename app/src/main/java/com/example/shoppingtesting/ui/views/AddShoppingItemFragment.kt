@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.shoppingtesting.R
 import com.example.shoppingtesting.ui.viewmodels.ShoppingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.item_image.*
 
+@AndroidEntryPoint
 class AddShoppingItemFragment : Fragment(R.layout.fragment_add_shopping_item) {
 
     lateinit var viewModel: ShoppingViewModel
