@@ -1,13 +1,21 @@
 package com.example.shoppingtesting.ui.views
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeLeft
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.MediumTest
 import com.example.shoppingtesting.R
+import com.example.shoppingtesting.adapters.ShoppingItemAdapter
+import com.example.shoppingtesting.data.local.ShoppingItem
+import com.example.shoppingtesting.getOrAwaitValue
 import com.example.shoppingtesting.launchFragmentHiltContainer
+import com.example.shoppingtesting.ui.viewmodels.ShoppingViewModel
+import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,6 +23,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.*
+import javax.inject.Inject
 
 // Integration Test yaptığımız için ve iki fragment arasındaki etkileşimi test etmek istiyoruz.
 // Bu yüzden MediumTest annotation'unu kullandık.
@@ -26,6 +35,12 @@ class ShoppingFragmentTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Inject
+    lateinit var testFragmentFactory: TestFragmentFactory
 
     @Before
     fun setUp() {
@@ -72,6 +87,26 @@ class ShoppingFragmentTest {
         // Ama bu kod bloğu bu Test dosyammız için uygun olmadığı için kullanmıyoruz.
 //        `when`(navController.popBackStack()).thenReturn(false)
 
+    }
+
+    // Uygulama içerisinde Swipe ile database'den veri silme olayının test senaryosu.
+    @Test
+    fun swipeShoppingItem_deleteItemDb() {
+        val shoppingItems = ShoppingItem("TEST",1,1f,"TEST", 1)
+        var testViewModel: ShoppingViewModel ?= null
+        launchFragmentHiltContainer<ShoppingFragment> (fragmentFactory = testFragmentFactory){
+            testViewModel = viewModel
+            viewModel?.insertShoppingItemIntoDb(shoppingItems)
+        }
+
+        onView(withId(R.id.rvShoppingItems)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ShoppingItemAdapter.ShoppingItemViewHolder>(
+                0,
+                swipeLeft()
+            )
+        )
+
+        assertThat(testViewModel?.shoppingItem?.getOrAwaitValue()).isEmpty()
     }
 
 }
