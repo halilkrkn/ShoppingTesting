@@ -92,6 +92,4 @@ class AddShoppingItemFragmentTest {
         assertThat(testViewModel.shoppingItem.getOrAwaitValue())
             .contains(ShoppingItem("shopping item", 5, 5.5f, ""))
     }
-
-
 }
