@@ -2,19 +2,15 @@ package com.example.shoppingtesting.ui.views
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.example.shoppingtesting.adapters.ImageAdapter
 import com.example.shoppingtesting.adapters.ShoppingItemAdapter
+import com.example.shoppingtesting.repositories.FakeShoppingRepositoryAndroidTest
 import com.example.shoppingtesting.ui.viewmodels.ShoppingViewModel
 import javax.inject.Inject
 
-// Fragmentlarımızda constructor inject işlemini kullanabilmek için FragmentFactory class'ını oluşturuyoruz.
-// Ve bu aslında sadece field inject olarak değil, bağımlılıkları constructor inject işlemini test etmeye gelince tercih edilen bir yoldur.
-// Yani eğer ilgili fragment'ımız constructor inject ile bir bağımlılığa sahipse bu tür fragmentlar içerisinde durumlarda Fragmentlarımızı test edebilmek için bu yöntem tercih edilir.
-// Çünkü temelde sadece fragment'lar oluşturabilir ve constructor'da farklı bağımlılıkları geçirebiliriz. Ama bunu sadece fragmentlar üzerinden testlerini gerçekleştiremeyiz.
-// O yüzden fragmentlarımız üzerinde constructor inject ile bağımlılık varsa Fragmentlarımızı da test etmek istiyorsak Fragment Factory'ye ihtiyacımız var.
-class FragmentFactory @Inject constructor(
+
+class TestFragmentFactory @Inject constructor(
     private val imageAdapter: ImageAdapter,
     private val glide: RequestManager,
     private val shoppingItemAdapter: ShoppingItemAdapter
@@ -26,7 +22,10 @@ class FragmentFactory @Inject constructor(
         return when (className) {
             ImagePickFragment::class.java.name -> ImagePickFragment(imageAdapter)
             AddShoppingItemFragment::class.java.name -> AddShoppingItemFragment(glide)
-            ShoppingFragment::class.java.name -> ShoppingFragment(shoppingItemAdapter)
+            ShoppingFragment::class.java.name -> ShoppingFragment(
+                shoppingItemAdapter,
+                ShoppingViewModel(FakeShoppingRepositoryAndroidTest())
+            )
             else -> super.instantiate(classLoader, className)
 
         }

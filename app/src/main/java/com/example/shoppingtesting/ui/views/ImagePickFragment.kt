@@ -23,6 +23,7 @@ class ImagePickFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        viewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
 
         imageAdapter.setOnItemClickListener {
             findNavController().popBackStack()
