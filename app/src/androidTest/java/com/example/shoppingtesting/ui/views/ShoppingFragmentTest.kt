@@ -59,7 +59,7 @@ class ShoppingFragmentTest {
 
         // İlgili fragmentlarımız üzerinden navigation işlemi yapmak için launchFragmentHiltContainer lambda fonksiyonunu çağırdık.
         // Ve bu ilgili fragment'ımızın navController'ını gerçekten bu sahte navController ile değiştirmek için bu lambda fonk. çağırdık.
-        launchFragmentHiltContainer<ShoppingFragment> {
+        launchFragmentHiltContainer<ShoppingFragment>(fragmentFactory = testFragmentFactory){
 
             // Test dosyamız içerisinde ilgili ShoppingFragment'imizde NavigationController işlevlerini sağladık.
             Navigation.setViewNavController(requireView(),navController)
