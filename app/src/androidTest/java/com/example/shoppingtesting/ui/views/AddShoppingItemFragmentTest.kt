@@ -56,7 +56,7 @@ class AddShoppingItemFragmentTest {
         val navController = mock(NavController::class.java)
 
         // Burada ilgili launchFragmentHiltContainer generic lambda fonksiyonu ile ilgili fragment olan AddShoppingItemFragment'i atadık ve bu fragment üzerinde NavController işlemlerinini kullanmayı ayarladık.
-        launchFragmentHiltContainer<AddShoppingItemFragment> {
+        launchFragmentHiltContainer<AddShoppingItemFragment>(fragmentFactory = fragmentFactory){
             Navigation.setViewNavController(requireView(), navController)
         }
 

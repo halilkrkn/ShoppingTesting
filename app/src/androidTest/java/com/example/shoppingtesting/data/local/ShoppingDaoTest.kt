@@ -5,6 +5,7 @@ import androidx.test.filters.SmallTest
 import com.example.shoppingtesting.getOrAwaitValue
 import com.example.shoppingtesting.launchFragmentHiltContainer
 import com.example.shoppingtesting.ui.views.ShoppingFragment
+import com.example.shoppingtesting.ui.views.TestFragmentFactory
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -45,6 +46,9 @@ class ShoppingDaoTest {
     @Named("test_db") // burada yazdımız Named ile TestAppModule'deki provideInMemoryDb'in kurulumunu kastetmiş olduk inject işlemi yaparak.
     lateinit var database: ShoppingItemDatabase
 
+    @Inject
+    lateinit var testFragmentFactory: TestFragmentFactory
+
     private lateinit var dao: ShoppingDao
 
     // Before annotation'u bu sınıfın içerisindeki her test senaryosundan önce çalıştırılacak.
@@ -73,7 +77,7 @@ class ShoppingDaoTest {
     // Ve inline bir fonksiyon olduğu içinde lambda fonksiyon olarak da ShoppingFragmenttaki kodlara ulaşabilmemize olanak sağladık. Yani ShoppingFragment'ta erişim sağladık.
     @Test
     fun testLaunchFragmentInHiltContainer(){
-        launchFragmentHiltContainer<ShoppingFragment> { 
+        launchFragmentHiltContainer<ShoppingFragment>(fragmentFactory = testFragmentFactory) {
         }
     }
 

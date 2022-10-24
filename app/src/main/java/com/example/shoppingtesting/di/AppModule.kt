@@ -44,7 +44,7 @@ object AppModule {
     fun provideDefaultShoppingRepository(
         dao: ShoppingDao,
         api: PixabayAPI
-    ) = DefaultShoppingRepository(dao,api) as ShoppingRepository
+    ) = DefaultShoppingRepository(dao, api) as ShoppingRepository
 
 
     @Singleton
@@ -57,9 +57,6 @@ object AppModule {
             .error(R.drawable.ic_baseline_image_search_24)
     )
 
-
-
-
     @Singleton
     @Provides
     fun provideShoppingDao(
@@ -69,7 +66,9 @@ object AppModule {
     @Singleton
     @Provides
     fun providePixabayApi(): PixabayAPI {
-        return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(PixabayAPI::class.java)
+        return Retrofit.Builder().baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(PixabayAPI::class.java)
     }
 
 }
