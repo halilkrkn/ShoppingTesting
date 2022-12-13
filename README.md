@@ -38,6 +38,7 @@ Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini 
 - Yani uygulamadaki farklı bileşenlerin arasındaki etkileşimi test eder. Örn: Fragmentler gibi.
 - Bu Android'deki tüm test işlemlerinin %20'ini oluşturmaktadır.
 - Bu testler bir cihaz veya emülatörde çalıştığı için Unit(Birim) Testlere göre daha yavaş çalışırlar.
+- Integration Testlerde Robolectric veya ActivityScenario sınıfları kullanılmaktadır.
 - Buradaki testler'de androidTest dizininde yazılır.
 
 #### <b> Büyük(Large) Seviyeli Testler - UI (End-toEnd) Test: </b> 
