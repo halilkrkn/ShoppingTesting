@@ -1,5 +1,5 @@
 # MVVM Projesi ile Derinlemesine Android Testing
-- Bu repo'da Android Testing üzerinden Test işlemleri nasıl yapılır bu konuda öğrendiklerimi sizlere yorum satırlarıyla anlatmaya çalıştım.
+- Bu repo'da Android Testing üzerinden TÜm Test işlemleri nasıl yapılır bu konuda öğrendiklerimi sizlere yorum satırlarıyla anlatmaya çalıştım.
 - Bir MVVM projesi üzerinden Unit Test, Integration Test ve UI Test'in nasıl yapıldığını yorum satırları ile anlatmaya çalıştım. Ama bunun üzerine Medium'dan seri de oluşturacağım.
 - Eğer doğrundan kodlar üzerinden kendi yorum satırlarım aracılığı ile incelemek/öğrenmek istiyorsanız Branches'ları takip ederek aşamalı bir şekilde ilerleyebilirsiniz. 
 - 
