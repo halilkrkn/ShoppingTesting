@@ -2,7 +2,7 @@
 - Bu repo'da Android Testing üzerinden TÜm Test işlemleri nasıl yapılır bu konuda öğrendiklerimi sizlere yorum satırlarıyla anlatmaya çalıştım.
 - Bir MVVM projesi üzerinden Unit Test, Integration Test ve UI Test'in nasıl yapıldığını yorum satırları ile anlatmaya çalıştım. Ama bunun üzerine Medium'dan seri de oluşturacağım.
 - Eğer doğrundan kodlar üzerinden kendi yorum satırlarım aracılığı ile incelemek/öğrenmek istiyorsanız Branches'ları takip ederek aşamalı bir şekilde ilerleyebilirsiniz. 
-- 
+
 ## Android'de Testing Nedir/Neden Kullanılır?
 - Bir uygulamayı test etmek, uygulama geliştirme sürecinin ayrılmaz bir parçasıdır. Uygulamanıza yönelik testleri tutarlı bir şekilde çalıştırarak, kullanıcının önüne sürmeden önce uygulamanızın doğruluğunu, işlevsel davranışını ve kullanılabilirliğini doğrulayabilirsiniz.
 - Testing'in bir diğer amacıda uygulama geliştirme sürecinde oluşabilecek hataları yakalayıp ileriki aşamalarda oluşabilecek hataları engellemektir. Bu şekilde iş yükünden ve zaman kayıplarından kurtulmuş oluruz.
@@ -41,17 +41,23 @@ Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini 
 - Integration Testlerde Robolectric veya ActivityScenario sınıfları kullanılmaktadır.
 - Buradaki testler'de androidTest dizininde yazılır.
 
-#### <b> -> Büyük(Large) Seviyeli Testler - UI (End-toEnd) Test: </b> 
+#### <b> -> Büyük(Large) Seviyeli Testler - UI (End-to-End) Test: </b> 
 - Bir kullanıcının uygulamanın tüm ekran veya kullanıcı akışı gibi daha büyük bölümlerini aynı anda doğrulayan testlerdir.
 - Yani, Uygulamanın birçok veya tüm bileşenlerinin birlikte iyi çalışıp/çalışmadığını ve kullanı arayüzünün olması gerektiği gibi görünüp/görünmediğini kontrol eden testlerdir.
 - Uygulamayu Uçtan uca baştan sona kontrol eden testlerdir.
 - Bu testlerin doğruluk oranı diğerlerine göre daha yüksektir çünkü gerçek hayattaki kullanımı simüle eder. 
 - Bu Android'deki tüm test işlemlerinin %10'unu oluşturmaktadır.
-- UI Testlerde Espresso kullanılmaktadır. Espresso bir UI Test Frameworküdür.
+- UI Testlerde Espresso kullanılmaktadır. Espresso bir UI Test Framework'üdür.
 
 #### <b> -> Bir Android Projesindeki Test Dizinleri: </b>
 - Android Studio'daki tipik bir proje, yürütme ortamlarına bağlı olarak testleri tutan iki dizin içerir. 
 - <b> androidTest dizini: </b> Gerçek veya sanal cihazlarda çalışan testleri içermelidir. Bu tür testler Android Bileşenlerine erişebilmek için, Integration Testleri ve UI(E2E) Testleri ve JVM'in tek başına uygulamanın işlevselliğini doğrulayamadığı diğer testleri içerir.
 - <b> test dizini: </b> Birim testleri yerel makinenizde çalışan testleri içermelidir. Yukarıdaki androidTest'in aksine bunlar yerel bir JVM üzerinde çalışan testlerdir.
 
-
+## Gerekli olan Unit(Birim) Testler:
+- Bir uygulamayı hazırlarken yapılması beklenen Unit Testler vardır. 
+### <b> Unit Test Olaylarını Yaparken; </b>
+- <b> ViewModel'ler </b> veya <b> Sunucular'ın </b> Unit Testlerinin yapılması gerekir.
+- <b> Data Layers (Veri Katmanı) </b> içerisindeki <b>Data Source</b> ve özellikle <b> Repository'</b>lerin Unit Testlerinin yapılması gerekir. Ve bu testler Data Layer(Veri Katmanı) için çoğu platformdan bağımsız olmalıdır. Yani test dizinleri içerisinde ki data layer ile proje içerisindeki data layer birbirinden bağımsız olmalıdır. Bunu yapmak için <b> Test Doubles (Test Çiftleri)</b> kullanırız. Bu Test Doubles'lar aslında testlerdeki repository kullanımının, veritabanı modüllerinin ve API'den gelen kaynakların asıl proje içerindekinden bağımsız olarak değiştirilmesini sağlar. Bu Test Doubles'lara ilerde değineceğim.
+- <b> Domain Layer(Katmanı) </b>'ında Unit Testlerinin diğer platformlardan bağımsız olarak testlerinin yapılması gerekir.  
+- <b> Utility Classes'lar</b> için de Unit Testlerinin yapılması gerekir.
