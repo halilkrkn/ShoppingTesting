@@ -31,8 +31,8 @@
 - <b> -> Unit Testler Local ve Instrumented Unit(Birim) Test olarak ikiye ayrılır; </b>
 - <b> -> Local Unit Test: </b> 
 Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini en aza indirgemek için JVM(Java Virtual Machine) üzerinden çalışır. Buradaki testler JVM üzerinden test işlemlerini yapmak için test dizinin içerisinde yazılır.
-- <b> -> Instrumented Unit Test: </b> Bu test'te Android'in bileşenlerine(bağlamlarına) dayanan bir testtir. Yani Android üzerindeki context yapılarına/bileşenlerine erişimine sahip olup cihaz veya emülatör üzerinden çalışan birim testlerdir. Local birimlere göre doğruluk oranı daha yüksektir ama bir cihaz veya emülatör üzerinden test koştuğu için daha yavaştır. Burdaki testler Android Bileşenlerine erişmek için androidTest dizinin içerisinde yazılır.
-- 
+- <b> -> Instrumented Unit Test: </b> Bu test'te Android'in bileşenlerine(bağlamlarına) dayanan bir testtir. Yani Android üzerindeki context yapılarına/bileşenlerine erişimine sahip olup cihaz veya emülatör üzerinden çalışan birim testlerdir. Local birimlere göre doğruluk oranı daha yüksektir ama bir cihaz veya emülatör üzerinden test koştuğu için daha yavaştır. Burdaki testler Android Bileşenlerine erişmek için androidTest dizinin içerisinde yazılır.                                                                                    ö
+00- 
 #### <b> -> Orta(Medium) Seviyeli Testler - Integration Test (Entegresyon Testi): </b> 
 - Integration testler aradadır ve iki veya daha fazla birim arasındaki entegrasyonu kontrol eder.
 - Yani uygulamadaki farklı bileşenlerin arasındaki etkileşimi test eder. Örn: Fragmentler gibi.
