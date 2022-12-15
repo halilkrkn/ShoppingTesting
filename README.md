@@ -84,19 +84,27 @@
 - Ama bununla birlikte, test edilen yapının veya class'ın çalışması için başka yapılara/sınıflara bağımlı olabilir. Mesela, bir ViewModel çalışması için başka bir Data Yapısına/Class'ına bağlı olabilir.
 - Bu yüzden Test edilen bir yapıya bağımlılık sağlanması gerektiğinde yaygın olarak **Test Doubles(Test Çifti veya Test Nesnesi)** oluşturulur.
 #### -> Test Doubles(Test Çiftler/Nesnesi) Nedir?
-- ** Test Çiftileri**, uygulamanızdaki bileşen gibi görünen ve hareket eden nesnelerdir, ancak testinizde belirli bir davranış veya veri sağlamak için oluşturulur.
+- **Test Çiftileri**, uygulamanızdaki bileşen gibi görünen ve hareket eden nesnelerdir, ancak testinizde belirli bir davranış veya veri sağlamak için oluşturulur.
 - En önemli avantajı, testlerini daha hızlı ve daha basit hale getirmeleridir.
 #### -> Test Doubles(Test Çiftler/Nesnesi) Türleri:
 - Birçok çeşit Test Doubles'lar vardır.
 - Bunların en çok kullanılanı **Fake, Mock, Stub** dır. 
 - **Bunlar;**
-  - **Fake**, Gerçek bir projedeki çalışan bir class'ın test dizinlerinde kullanılabilmesi için fake bir class'ı oluşturulur. Çünkü ilgili class'ın gerçek projedeki class'tan bağımsız bir yapıda olması beklenir ve bir test çifti oluşturulur. Örneğin, Bir repository için FakeRepository oluşturulur ki test dizinlerinde senaryolarına uygun bir şekilde fonksiyonları yazılır.Bir başka örnekte, uygulama için veritabanı kullanımı için kullanılır. Diğer test çiftlerine kıyasla sistemin gerçek davranışına daha yakındır.
+  - **Fake**, Gerçek bir projedeki çalışan bir class'ın test dizinlerinde kullanılabilmesi için fake bir class'ı oluşturulur. 
+    - Çünkü ilgili class'ın gerçek projedeki class'tan bağımsız bir yapıda olması beklenir ve bir test çifti oluşturulur. 
+    - Örneğin, Bir repository için FakeRepository oluşturulur ki test dizinlerinde senaryolarına uygun bir şekilde fonksiyonları yazılır.
+    - Bir başka örnekte, uygulama için veritabanı kullanımı için kullanılır. Diğer test çiftlerine kıyasla sistemin gerçek davranışına daha yakındır.
     - Kod içerisinde [Fake Test Doubles Kullanımı](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/test/java/com/example/shoppingtesting/repositories/FakeShoppingRepository.kt#L18:~:text=//%20Burada%20fake%20bir%20repository%20olu%C5%9Fturuyoruz.%20Yani%20asl%C4%B1nda%20test%20doubles%20olu%C5%9Fturuyoruz.) olayını inceleyebilirsiniz.
-  - **Mock**, Yazılan bir kodun veya bir class'ın bağımlı olduğu objelerin sahte bir referansını oluşturmamıza olanak sağlayan bir test double'dır. Yani bu şekilde ilgili nesneyi mock sayesinde taklit ederek sahte bir nesnesi oluştulan yapı test edilen sistemin yapılması beklenen işlemlerin yapılıp/yapılmadığını doğrulamak olarak tanımlanabilir. Bu yapıyı kullanabilmek için Mockito framework'ü projeye implement edilmelidir.
+  - **Mock**, Yazılan bir kodun veya bir class'ın bağımlı olduğu objelerin sahte bir referansını oluşturmamıza olanak sağlayan bir test double'dır. 
+    - Yani bu şekilde ilgili nesneyi mock sayesinde taklit ederek sahte bir nesnesi oluştulan yapı test edilen sistemin yapılması beklenen işlemlerin yapılıp/yapılmadığını doğrulamak olarak tanımlanabilir. 
+    - Bu yapıyı kullanabilmek için Mockito framework'ü projeye implement edilmelidir.
     -  Kod içerisinde [Mock Test Doubles Kullanımı](https://github.com/halilkrkn/ShoppingTesting/blob/f0007e1240cc6cdb9fc1e4a8c7c17bb132da1b35/app/src/androidTest/java/com/example/shoppingtesting/ui/views/ShoppingFragmentTest.kt#L54:~:text=Mock%20asl%C4%B1nda%20bir%20nevi%20test%20double%27d%C4%B1r%20yani%20test%20bir%20test%20dubl%C3%B6r%C3%BCd%C3%BCr/sim%C3%BClasyonudur.) olayını inceleyebilirsiniz.
-  - **Stub**, Genellikle bir bağımlılığın gerçek projedeki uygulamasını değiştirmek için sabit veya döndürülmesi istenilen değerleri yapılandıran bir test double'dır. Yani,bir yöntem çağrıldığında hazır bir yanıt döndürür. Mock'lara ve Fake'e çok benzer.
-  - **Dummy**, En basit test double'dır. Testin kendisiyle çok fazla bir ilgisi olmasa da tek amacı argüman olarak kullanılmasıdır. Yani genellikle zorunlu parametreleri doldurmak için kullanılır ve başka hiçbir şey için kullnılmaz.
-  - **Spy**, Spy çalışmak için işlevsel bir uygulama kullanması ve daha sonra doğrulama veya iddia için kullanılabilecek daha karmaşık durumları kaydedebilen bir test double'dır. En kafa karıştırıcı test double'dır.
+  - **Stub**, Genellikle bir bağımlılığın gerçek projedeki uygulamasını değiştirmek için sabit veya döndürülmesi istenilen değerleri yapılandıran bir test double'dır. 
+    - Yani,bir yöntem çağrıldığında hazır bir yanıt döndürür. Mock'lara ve Fake'e çok benzer.
+  - **Dummy**, En basit test double'dır. Testin kendisiyle çok fazla bir ilgisi olmasa da tek amacı argüman olarak kullanılmasıdır. 
+    - Yani genellikle zorunlu parametreleri doldurmak için kullanılır ve başka hiçbir şey için kullnılmaz.
+  - **Spy**, Spy çalışmak için işlevsel bir uygulama kullanması ve daha sonra doğrulama veya iddia için kullanılabilecek daha karmaşık durumları kaydedebilen bir test double'dır. 
+    - En kafa karıştırıcı test double'dır.
   - **Shadow**, Aynı Robolectic'de kullanılan bir Fake test double'dır.
 
 ## Android'de Testing Türleri:
@@ -116,9 +124,9 @@
 - Bu Android'deki tüm test işlemlerinin %70'ini oluşturmaktadır.
 - Unit Testler'de JUnit, Truth, Mocking gibi frameworkler kullanılır.
 - <b> -> Unit Testler Local ve Instrumented Unit(Birim) Test olarak ikiye ayrılır; </b>
-- <b> -> Local Unit Test: </b> 
+  - <b> -> Local Unit Test: </b> 
 Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini en aza indirgemek için JVM(Java Virtual Machine) üzerinden çalışır. Buradaki testler JVM üzerinden test işlemlerini yapmak için test dizinin içerisinde yazılır.
-- <b> -> Instrumented Unit Test: </b> Bu test'te Android'in bileşenlerine(bağlamlarına) dayanan bir testtir. Yani Android üzerindeki context yapılarına/bileşenlerine erişimine sahip olup cihaz veya emülatör üzerinden çalışan birim testlerdir. Local birimlere göre doğruluk oranı daha yüksektir ama bir cihaz veya emülatör üzerinden test koştuğu için daha yavaştır. Burdaki testler Android Bileşenlerine erişmek için androidTest dizinin içerisinde yazılır.                                             
+  - <b> -> Instrumented Unit Test: </b> Bu test'te Android'in bileşenlerine(bağlamlarına) dayanan bir testtir. Yani Android üzerindeki context yapılarına/bileşenlerine erişimine sahip olup cihaz veya emülatör üzerinden çalışan birim testlerdir. Local birimlere göre doğruluk oranı daha yüksektir ama bir cihaz veya emülatör üzerinden test koştuğu için daha yavaştır. Burdaki testler Android Bileşenlerine erişmek için androidTest dizinin içerisinde yazılır.                                             
 
 #### <b> -> Orta(Medium) Seviyeli Testler - Integration Test (Entegresyon Testi): </b> 
 - Integration testler aradadır ve iki veya daha fazla birim arasındaki entegrasyonu kontrol eder.
