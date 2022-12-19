@@ -4,7 +4,7 @@
 - Sadece yapmanız gereken, Branches'ları aşamalı bir şekilde takip ederek kodlar üzerindeki kendi yorum satırlarım aracılığı ile ileyelebilirsiniz/öğrenebilirsiniz.
 - Neredeyse Testing olduğu her yerde açıklayıcı yorum satırlarımı göreceksiniz. 
 - Aslında hedefim kodlar içerisinde gezinerek ne, nerde, nasıl kullanılmış incelemeniz/öğrenmeniz.
-- Eksiklerim elbette mevcut ama bunu en aza indirgemeye çalıştım umarım faydalı olur. 
+- Eksiklerim elbette mevcut ama bunu en aza indirgemeye çalıştım umarım faydalı olur. [Discussions](https://github.com/halilkrkn/ShoppingTesting/discussions) kısmından geri bildirimlerinizi bekliyorum🤓 
 - Burada ilk önce genel bir Android'de Test Driven Development(TDD) yapısını anlatmaya çalıştım. Eğer olmazsa Intro'yu geç yapıp kodlara geçebilirsiniz. 
 
 ## Android'de TDD Nedir/Neden Kullanılır?
