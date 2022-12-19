@@ -29,10 +29,11 @@
  #### -> Android'de Bir TDD Stratejisi Tanımlama:
  - Normal şartlar altında uygulamanızdaki her kod satırını, uygulamanızın uyumlu olduğu her cihazda test etmeniz gerekir. Ama bu durum pratik olamayacak kadar yavaş ve maliyetlidir. (Böyle bir şeyi hiçbir şirket istemez tabi.)
  - <b>İyi bir Test Stratejisinde</b>, bir testin;
- - 1. <b> Doğruluğu </b>
- - 2. <b> Hızı </b>
- - 3. <b> Güvenirliliği </b>
- arasında uygun bir denge bulunur.
+   - 1. <b> Doğruluğu </b>
+   - 2. <b> Hızı </b>
+   - 3. <b> Güvenirliliği </b>
+ 
+    arasında uygun bir denge bulunur.
  - Uygulamanızda oluşturmuş olduğunuz testleri JVM üzerinden düşük doğruluk testleri çalıştırılabilir ama daha hızlıdır.
  - Emülatör veya fiziksel cihazların kendisinde daha yüksek doğruluk testler çalıştırılabilir ama daha yavaştır.
  - Bu nedendele yüksek doğruluk testleri genellikle daha yavaş olduğundan daha fazla kaynak gerektirir. O yüzden her testi yüksek doğruluk test'i içerisinde yapılmamalıdır.  
@@ -68,7 +69,7 @@
   - Business Logic içeren sınıflarda doğrudan framework bağımlılıklarından(dependencies) kaçınılmalı. Örneğin, ViewModel içinde Android Context yapılarının kullanmaması.
   - Bağımlılıkların değiştirilmesini kolaylaştırın. Bir Dependency Injection(DI) kullanılması.
 
-##Peki, İyi Bir Test Ne Yapar?
+## Peki, İyi Bir Test Ne Yapar?
 - İyi bir test senaryosunda hangi doğru özelliklere sahip olunması gerektiğini bilmek/düşünmek gerek.
 - Ve iyi bir Test Senaryosu 3 karakteristik özelliğe sahip olmalıdır;
   - **Scope(Kapsam)**
@@ -78,7 +79,7 @@
 - Asla bir testin sonucunu başka bir testin sonucuna bağla hale getirilmemelidir. Yani Her zaman testlerinizin bağımsız olduğundan ve başka bir testin senaryosuna bağlı olmadığından emin olunmalıdır.
 - Herhangi bir test senaryosunun başka bir test senaryosunun sonucunu etkilemediğinden emin olunması gerekir. 
 
-##Test İzolasyonu ve Bağımlılıkları
+## Test İzolasyonu ve Bağımlılıkları
 - Bir class'ı veya bir yapıyı test etmek istenildiğinde bu testler tekil olarak yapılmalıdır.
 - Örneğin, Bir ViewModel'i test etmek için Android Frameworklerine yani Android Bileşenlerine bağlı olmaması gerektiği için Emülatör veya fiziksel cihazda başlatılması gerekmez.
 - Ama bununla birlikte, test edilen yapının veya class'ın çalışması için başka yapılara/sınıflara bağımlı olabilir. Mesela, bir ViewModel çalışması için başka bir Data Yapısına/Class'ına bağlı olabilir.
@@ -168,7 +169,7 @@ Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini 
 - Bir dosyayı kaydederken tam depolama simülasyonu
 - Bir işlemin ortasında yeniden oluşturulan objectler ( Cihazın döndürdüğümüzde ekranda gerçekleşen activity gibi)
 
-## Kaçılnılması Gereken Unit Testler:
+## Kaçınılması Gereken Unit Testler:
 - Düşük değerleri nedeniyle bazım birim testlerinden kaçınılmalıdır.
 - Kendi kodunuz olmayan, Framework'ler ve Library'lerin doğru çalışıp/çalışmadığını doğrulayan testlerden kaçınılmalıdır.
 - Activity, Fragments ve Services gibi framework giriş noktalarında iş mantığı bulunmamaktadır. Bu nedenle Unit Testi öncelik olmamalıdır/kaçınılmalıdır. 
@@ -184,3 +185,53 @@ Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini 
 - En kapsayıcı test yollarındandır.
 - Bu testler, uygulama içerisinde tüm akışları gezinen bir kullanıcıyı simüle eder. 
 - Bunlar, başlatma sırasında run-time caches'lerini kontrol etmek için kullanılan yararlı testlerdir. 
+
+## Proje İçerisinde Kullanılan Önemli Class'lar:
+
+### Test Klasörlerindeki [LiveDataUtilAndroidTest](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/LiveDataUtilAndroidTest.kt) ve [LiveDataUtilTest](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/test/java/com/example/shoppingtesting/LiveDataUtilTest.kt) Class'ları: 
+- Bu class'lar testing içerisinde livedata yapılarının kullanımı için çok önemli ve kullanılması gerekir. 
+- İlgili test senaryolarında kullanılan **get:Rule annotation'ı** altında **InstantTaskExecutorRule()** sınıfı yani aslında LiveDataUtilTest ve LiveDataAndroidUtilTest class'larını çağırmış olduk.
+- Bu InstantTaskExecutorRule() kullanımı sayesinde LiveData yapılarının kullanımı test ortamlarında sağlanmış oluyor.
+- Yani test ortamında gözlemlenebilir yapıdaki LiveData kullanımını sağlatmış olduk. Çünkü test ortamında observe olarak verileri LiveData'yı gözlemlemek için bu Google'ın oluşturmuş olduğu yapıyı kullandık.
+- Aslında "Run tasks synchronously" işlemi yani görevleri eşzamanlı olarak(senkronize)  çalıştırma işlemi yapar
+- Ve bu işlem JVM üzerindeki testlerde kullanılır.
+- İlgili kaynaklar:
+	 - [Unit-testing LiveData and Other Common Observability Problems](https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04)
+- LiveDataUtilTest Class'ının kullanımına android'in kendi github hesabından ulaşabilirsiniz:
+  - [LiveDataUtil Kurulumu - InstantTaskExecutorRule](https://github.com/android/architecture-components-samples/blob/master/LiveDataSample/app/src/test/java/com/android/example/livedatabuilder/util/LiveDataTestUtil.kt#L28:~:text=util.concurrent.TimeoutException-,/**,*/,-fun%20%3CT)
+  - [Unit Test'te LiveData ve InstantTaskExecutorRule Kullanımı](https://github.com/android/architecture-components-samples/blob/0905d0e307ef457a4c37511a542edfe3bdb4d2a3/LiveDataSample/app/src/test/java/com/android/example/livedatabuilder/LiveDataViewModelTest.kt#L48)
+
+### Test klasörü içerisindeki shoppintTesting Klasörüne Coroutine'ler sayesinde Dispatchers'ların yönetimi için [MainDispatcherCoroutineRule](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/test/java/com/example/shoppingtesting/MainDispatcherCoroutineRule.kt) Class'ı: 
+ - Bu Sınıfta gerçek proje içerisinde örneğin viewModelimizi test ederken repositoryde coroutine'leri kullandığımızdan dolayı ve repository'de fonksiyonları coroutine yapılarından olan suspend fonksiyon ile fonksiyonları oluşturduğumuz için ViewModel'de test senarylarının çalışması için bir kural yazıldı.
+ - MainDispatcherCoroutineRule Class'ında Coroutine'ler sayesinde Dispatchers'ların yönetimi için özellikle main Dispatchers'ların test dosyasında yönetebilmek için de oluşturuldu.
+ - Eğer gerekli olarak bu kuralı eklemeseydik build işlemi yaparken test senaryolarımız çalışmıyor ve hatalarla karşılaşırdık.
+ - Bu durum androidTest dosyası içerisinde olsaydı eğer böyle bir kurala ihtiyacımız olmayabilirdi. Çünkü bu klasör de zaten Android Componentlerine(Bileşenlerine-Bağlamına) sahip olunduğundan dolayı bir cihaz üzerinden test edildiğin de bunu o cihaz içerisindeki erişimlerden halledebiliyoruz. 
+ - Buradaki kuralı da Test dosyası içerisindeki viewModelTest class'ımıza **get:Rule** yaparak **MainDispatcherCoroutineRule** class'ını çağırıyoruz.
+ - İlgili MainDispatcherCoroutineRule kuralı zaten android'in kendi github hesabından ve developer.android.com'dan detayları öğrenebilirsiniz.
+   - [MainDispatcherCoroutineRule Class'ı](https://github.com/android/snippets/blob/e714d659d8dceb331a8d8436caa88dc12a8e8cf3/kotlin/src/test/kotlin/com/example/android/coroutines/testing/HomeViewModelTestUsingRule.kt#L33-L56)
+   - [Testing Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines/test)
+
+### androidTest Klasörü içerisindeki shoppingTesting klasörüne Dagger-Hilt için [DaggerHiltTestRunner'ı](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/DaggerHiltTestRunner.kt) ve shoppingTesting klasörünün içindeki di klasörüne de [TestAppModule Class'ı](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/di/TestAppModule.kt) Eklendi:
+- Test ortamında **Dagger-Hilt** kullanmak için androidTest Klasörüne ilk önce **DaggerHiltTestRunner** class'ını oluşturuyoruz.
+- Çünkü Dagger-Hilt'i kullanabilmemiz için androidTest klasörü'müzde Hilt'i dahil edip çalıştırmamız için DaggerHiltTestRunner classı'nada AndroidJUnitRunner'ı çağırıp Unit Test işlemlerimizi yaptığımız Instrumentation katmanında AndroidJUnitRunner sınıfının işlevini sağlamış olduk. 
+- Böylelikle Instrumentation katmanında Android Componentleri kullandığımız için Dagger-Hilt ile artık bu componentlerin yönetimi için module oluşturarak Dependency Injection işlemlerini androidTest klasörü içerisinde yapabilme imkanına eriştik.
+- **DaggerHiltTestRunner class'ı** ile;
+  - Bu sınıfa zaten AndroidJUnitRunner'ı da zaten inherite ettiği için aslında Hilt'i test işlemlerine dahil etmiş oluyoruz.   
+  - Burada oluşturduğumuz bu sınıfı Test dosyalarına işlemlerine dahil etmek için build.gradle(app) de defaultConfig'deki androidTest içerisinde testlerin çalışması için olan testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"'ın içerisindeki adresin yerine burada oluşturduğumuz class'ın yolunu veriyoruz. 
+  - Yani build.gradle(app) de artık testInstrumentationRunner "com.example.shoppingtesting.DaggerHiltTestRunner" şeklinde bir tanımlama ile Dagger-Hilt'i artık androidTest klasörü içerisinde kullabilmeyi sağladık.
+  - ShoppingDaoTest class'ında ise @RunWith(AndroidJUnit4:class) annotation'unu çağırmıyoruz ve ShoppingDaoTest sınıfında RunWith annotation yerine @HiltAndroidTest annotation'ını kullanıyoruz.
+  - Böylelikle bu kullandığımız annotation sayesinde Hilt'i test işlemlerine dahil etmiş oluyoruz ve artık hilt üzerinden testlerimizi koşturuyoruz.
+  - Bu işlemleri daha detaylı olarak Android Developers'dan inceleyebilirsiniz.
+    - [Hilt Testing Guide](https://developer.android.com/training/dependency-injection/hilt-testing)
+
+ - DaggerHiltTestRunner'ı test işlemlerinde kullanımına hazır hale getirdiğimize göre artık androidTest klasöründe Hilt'i kullanabiliriz.
+ - O yüzden androidTest klasörümüz içerisinden shoppingtesting klasörünün içerisine **gerçek projedeki gibi di klasörü** oluşturup bir object ifadedeki **TestAppModule.kt** dosyası oluşturuyoruz.
+- androidTest klasöründe artık Dagger-Hilt'i gerçek proje klasörleri içerisinde kullandığımız gibi kullanabiliriz.
+- Bu TestAppModule object'i içerisine gerçek projedeki AppModule içerisine yazdığımız işlemler gibi aynı kod işlevlerini yazıyoruz ve hemen hemen aynı annotation'ları kullanıyoruz. Mesela @Provides annotation gibi.
+- **Ama TestAppModule içerisinde @Singleton Annotation'ını kullanılmıyor.**    
+- Yani @Singleton test içerisinde kullanmıyoruz. Çünkü her test durumu için yeni bir örnek oluşturmak istiyoruz. Yani burada tekil olmasını istemiyoruz.
+- androidTest dizini içerisindeki data/local klasörü içerisinde ShoppingDaoTest class'ımın içerisinde de **@get:Rule** altında bir değişkene **[HiltAndroidRule](https://github.com/halilkrkn/ShoppingTesting/blob/2e85d40a3085242cbbfb751a07402e81f141f655/app/src/androidTest/java/com/example/shoppingtesting/data/local/ShoppingDaoTest.kt#L43)** classını implemente ederiz.
+- Bu şekilde test senaryolarımızın olduğu ShoppingDaoTest class'ında ise artık Dagger-Hilt'i rahatlıkla kullabiliriz. Yani Dependency Inject işlemlerini gerçekleştirebiliriz. 
+- TestAppModule içerisindeki ilgili işlevleri fonksiyonları [ShoppingDaoTest Class](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/data/local/ShoppingDaoTest.kt)'ına inject yapabiliriz ve bağımlı hale getirebiliriz.
+
+
