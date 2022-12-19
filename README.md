@@ -193,12 +193,13 @@ Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini 
 - İlgili test senaryolarında kullanılan **get:Rule annotation'ı** altında **InstantTaskExecutorRule()** sınıfı yani aslında LiveDataUtilTest ve LiveDataAndroidUtilTest class'larını çağırmış olduk.
 - Bu InstantTaskExecutorRule() kullanımı sayesinde LiveData yapılarının kullanımı test ortamlarında sağlanmış oluyor.
 - Yani test ortamında gözlemlenebilir yapıdaki LiveData kullanımını sağlatmış olduk. Çünkü test ortamında observe olarak verileri LiveData'yı gözlemlemek için bu Google'ın oluşturmuş olduğu yapıyı kullandık.
-- Aslında "Run tasks synchronously" işlemi yani görevleri eşzamanlı olarak(senkronize)  çalıştırma işlemi yapar
+- Aslında "Run tasks synchronously" işlemi yani görevleri eşzamanlı olarak(senkronize)  çalıştırma işlemi yapar.
 - Ve bu işlem JVM üzerindeki testlerde kullanılır.
+- Bu InstantTaskExecutorRule() class'ını LiveData'nın kullanıldığı hemen hemen tüm sınıflarda kullandık.
 - İlgili kaynaklar:
 	 - [Unit-testing LiveData and Other Common Observability Problems](https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04)
 - LiveDataUtilTest Class'ının kullanımına android'in kendi github hesabından ulaşabilirsiniz:
-  - [LiveDataUtil Kurulumu - InstantTaskExecutorRule](https://github.com/android/architecture-components-samples/blob/master/LiveDataSample/app/src/test/java/com/android/example/livedatabuilder/util/LiveDataTestUtil.kt#L28:~:text=util.concurrent.TimeoutException-,/**,*/,-fun%20%3CT)
+  - [LiveDataUtil - InstantTaskExecutorRule Kurulumu](https://github.com/android/architecture-components-samples/blob/master/LiveDataSample/app/src/test/java/com/android/example/livedatabuilder/util/LiveDataTestUtil.kt#L28:~:text=util.concurrent.TimeoutException-,/**,*/,-fun%20%3CT)
   - [Unit Test'te LiveData ve InstantTaskExecutorRule Kullanımı](https://github.com/android/architecture-components-samples/blob/0905d0e307ef457a4c37511a542edfe3bdb4d2a3/LiveDataSample/app/src/test/java/com/android/example/livedatabuilder/LiveDataViewModelTest.kt#L48)
 
 ### Test klasörü içerisindeki shoppintTesting Klasörüne Coroutine'ler sayesinde Dispatchers'ların yönetimi için [MainDispatcherCoroutineRule](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/test/java/com/example/shoppingtesting/MainDispatcherCoroutineRule.kt) Class'ı: 
@@ -215,11 +216,11 @@ Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini 
 - Test ortamında **Dagger-Hilt** kullanmak için androidTest Klasörüne ilk önce **DaggerHiltTestRunner** class'ını oluşturuyoruz.
 - Çünkü Dagger-Hilt'i kullanabilmemiz için androidTest klasörü'müzde Hilt'i dahil edip çalıştırmamız için DaggerHiltTestRunner classı'nada AndroidJUnitRunner'ı çağırıp Unit Test işlemlerimizi yaptığımız Instrumentation katmanında AndroidJUnitRunner sınıfının işlevini sağlamış olduk. 
 - Böylelikle Instrumentation katmanında Android Componentleri kullandığımız için Dagger-Hilt ile artık bu componentlerin yönetimi için module oluşturarak Dependency Injection işlemlerini androidTest klasörü içerisinde yapabilme imkanına eriştik.
-- **DaggerHiltTestRunner class'ı** ile;
+- **[DaggerHiltTestRunner Class'ı](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/DaggerHiltTestRunner.kt)** ile;
   - Bu sınıfa zaten AndroidJUnitRunner'ı da zaten inherite ettiği için aslında Hilt'i test işlemlerine dahil etmiş oluyoruz.   
-  - Burada oluşturduğumuz bu sınıfı Test dosyalarına işlemlerine dahil etmek için build.gradle(app) de defaultConfig'deki androidTest içerisinde testlerin çalışması için olan testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"'ın içerisindeki adresin yerine burada oluşturduğumuz class'ın yolunu veriyoruz. 
-  - Yani build.gradle(app) de artık testInstrumentationRunner "com.example.shoppingtesting.DaggerHiltTestRunner" şeklinde bir tanımlama ile Dagger-Hilt'i artık androidTest klasörü içerisinde kullabilmeyi sağladık.
-  - ShoppingDaoTest class'ında ise @RunWith(AndroidJUnit4:class) annotation'unu çağırmıyoruz ve ShoppingDaoTest sınıfında RunWith annotation yerine @HiltAndroidTest annotation'ını kullanıyoruz.
+  - Burada oluşturduğumuz bu sınıfı Test dosyalarına işlemlerine dahil etmek için build.gradle(app) de defaultConfig'deki androidTest içerisinde testlerin çalışması için default olarak var olan **testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"'ın** içerisindeki adresin yerine burada oluşturduğumuz class'ın yolunu veriyoruz. 
+  - Yani **build.gradle(app)** de artık **[testInstrumentationRunner "com.example.shoppingtesting.DaggerHiltTestRunner"](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/build.gradle#:~:text=testInstrumentationRunner%20%22com.example.shoppingtesting.DaggerHiltTestRunner%22)** şeklinde bir tanımlama ile **Dagger-Hilt'i** artık **androidTest klasörü içerisinde kullabilmeyi** sağladık.
+  - ShoppingDaoTest Class'ında ise **@RunWith(AndroidJUnit4:class) Annotation'unu çağırmıyoruz** ve ShoppingDaoTest sınıfında **[RunWith Annotation yerine @HiltAndroidTest Annotation'ını](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/data/local/ShoppingDaoTest.kt#:~:text=%40HiltAndroidTest%20//%20%40RunWith(AndroidJUnit4%3A%3Aclass)%20Buradaki%20annotation%20yerine%20%40HiltAndroidTest%20annotation%27%C4%B1%20kullan%C4%B1yoruz.)** kullanıyoruz.
   - Böylelikle bu kullandığımız annotation sayesinde Hilt'i test işlemlerine dahil etmiş oluyoruz ve artık hilt üzerinden testlerimizi koşturuyoruz.
   - Bu işlemleri daha detaylı olarak Android Developers'dan inceleyebilirsiniz.
     - [Hilt Testing Guide](https://developer.android.com/training/dependency-injection/hilt-testing)
@@ -229,9 +230,89 @@ Sadece yerel ortamda çalışan birim testlerdir. Testlerin yürütme süresini 
 - androidTest klasöründe artık Dagger-Hilt'i gerçek proje klasörleri içerisinde kullandığımız gibi kullanabiliriz.
 - Bu TestAppModule object'i içerisine gerçek projedeki AppModule içerisine yazdığımız işlemler gibi aynı kod işlevlerini yazıyoruz ve hemen hemen aynı annotation'ları kullanıyoruz. Mesela @Provides annotation gibi.
 - **Ama TestAppModule içerisinde @Singleton Annotation'ını kullanılmıyor.**    
-- Yani @Singleton test içerisinde kullanmıyoruz. Çünkü her test durumu için yeni bir örnek oluşturmak istiyoruz. Yani burada tekil olmasını istemiyoruz.
+- Yani **@Singleton Annotation'unu** test içerisinde kullanmıyoruz. Çünkü her test durumu için yeni bir örnek oluşturmak istiyoruz. Yani burada tekil olmasını istemiyoruz.
 - androidTest dizini içerisindeki data/local klasörü içerisinde ShoppingDaoTest class'ımın içerisinde de **@get:Rule** altında bir değişkene **[HiltAndroidRule](https://github.com/halilkrkn/ShoppingTesting/blob/2e85d40a3085242cbbfb751a07402e81f141f655/app/src/androidTest/java/com/example/shoppingtesting/data/local/ShoppingDaoTest.kt#L43)** classını implemente ederiz.
 - Bu şekilde test senaryolarımızın olduğu ShoppingDaoTest class'ında ise artık Dagger-Hilt'i rahatlıkla kullabiliriz. Yani Dependency Inject işlemlerini gerçekleştirebiliriz. 
 - TestAppModule içerisindeki ilgili işlevleri fonksiyonları [ShoppingDaoTest Class](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/data/local/ShoppingDaoTest.kt)'ına inject yapabiliriz ve bağımlı hale getirebiliriz.
+
+### [HiltTestActivity](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/debug/java/com/example/shoppingtesting/HiltTestActivity.kt) ve [HiltExtension](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/HiltExtension.kt) Kullanımı;
+- Öncelikle **HiltActivity ve HiltExtension'ı** kullanmak için **build.gradle(app)** içerisine  **[debugImplementation("androidx.fragment:fragment-testing:1.3.0-alpha08")](https://github.com/halilkrkn/ShoppingTesting/blob/288c09dd4510d43d08753544bbfa39ef749736fd/app/build.gradle#L120)** kütüphanesini ekliyoruz.
+- Bu kütüphane sayesinde amacımız **Dagger-Hilt** kullandığımız projemizde ve test dosyalarımızda Hilt kullanıp **Fragment'ler** üzerinden **Integration Test ve UI Test** işlemlerini yapmak.
+- Oluşturduğumuz debug dosyamız içerisine Dagger-Hilt ile test senaryolarımızın fragmentlarda kullanılması için gereken işlemleri/işlevleri yazdık.
+- Böylelikle gerçek projedeki gibi fragmentlar içinde Hilt kurulumu yaptık ama test klasörlerinde çalışması için **com(debug) içerisinde** bir **HiltTestActivity class'ı** oluşturduk ve com(debug) dosyası içerisine **[androidManifest.xml](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/debug/AndroidManifest.xml)** dosyasını kopyaladık.
+- Sonra ise androidTest dosyamız içerisine de HiltExtension kotlin dosyası oluşturarak test durumlarımız için mainActivity olarak [HiltActivity'i](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/HiltExtension.kt#:~:text=HiltTestActivity%3A%3Aclass.java) gösterdik ve fragmentlarımızı da bu mainActivity'mizde kullanmamızı sağlattık.
+- Şuan **[launchFragmentHiltContainer](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/HiltExtension.kt#:~:text=%3A%20Fragment%3E-,launchFragmentHiltContainer,-()** generic fonksiyonumuz sayesinde gerçek projedeki ShoppingFragment'i tanımladık.
+- Ve inline bir fonksiyon olduğu içinde lambda fonksiyon olarak da ShoppingFragmenttaki kodlara ulaşabilmemize olanak sağladık. Yani ShoppingFragment'ta erişim sağladık.
+
+#### com(debug) Klasörümüz İçerisine [HiltTestActivity Class'ı](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/debug/java/com/example/shoppingtesting/HiltTestActivity.kt) ve [AndroidManifest.xml](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/debug/AndroidManifest.xml) Oluşturulması ve Kullanımı;
+- Test senaryolarımız için fragmentlarımızı ekleyeceğimiz Activity, HiltTestActivity class'ı olacak.
+- Aynı gerçek proje üzerindeki MainActivity'imiz üzerinden fragmentlarımızı oluşturduğumuz gibi burda da test senaryolarımız için bir HiltTestActivity'imiz üzerinden Fragmentlarımızı oluşturabiliriz ve testlerini yapabiliriz.
+- **@AndroidEntryPoint Annotation'u** ile aynı gerçek projedeki gibi burda da verdikki **Dagger-Hilt** ile tek bir activity üzerinden birden fazla fragmentimizi test dosyalarımız üzerinden de testlerini sağlayabileceğiz.
+- Ama gerçek projede oluduğu gibi gerçek dosyamızdaki manifest dosyamıza eklemeyeceğiz çünkü bu yalnızca test durumlarımız için kullandığımız bir Activity'dir.
+- O yüzden test dosyalarımız için kullanacağımız için AndroidManifest.xml dosyamızı yeni oluştuduğumuz com(debug) dosyamız içerine kopyalayıp yapıştırıyoruz.
+- Bu debug dosyamıza kopyaladığımız AndroidManifest.xml dosyamızın içerise activity olarak **android:name'e HiltTestActivity'i** ekliyoruz. Böylelikle test dosyalarımız içerisinde HiltTestActivity'imizin kullanımını sağlatmış oluyoruz.
+- Ve ek olarak da **android:exported= false** yani dışa aktarmayı false olarak yapıyoruz ki bu sadece bu paketteki bu HiltTestActivity'sine dışarıdan değil de temelde erişebileceğimiz anlamına gelir.
+
+#### androidTest Test Klasörümüz İçerisine [HiltExtension Class'ı](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/HiltExtension.kt) Oluşturulması ve Kullanımı:
+- HiltExtension dosyası google tarafından yazılmıştır. **İlgili kaynak,** [HiltExt.kt](https://github.com/android/architecture-samples/blob/dev-hilt/app/src/androidTest/java/com/example/android/architecture/blueprints/todoapp/HiltExt.kt#L38) 
+- O yüzden biz de android'in tavsiye ettiği bir şekilde HiltExtension adında bir kotlin dosyası oluşturuyoruz.
+- Bu dosyamız içerisinde kodlar sayesinde **Integration Test ve UI testlerimizi** fragmentlerimiz içerisinde rahatlıkla gerçekleştirebileceğiz. 
+- Çünkü bu dosya içerisinde **ActivityScenario** kullanarak MainActivity(debug dosyamız içerisindeki HiltTestActivity) üzerinden diğer fragmentlarımızda rahatlıkla test işlemlerini yapabiliyoruz.
+- Bu HiltExtension kotlin dosyası sadece bir Extension fonksiyonudur. Aslında sadece Dagger-Hilt için bir tür extension fonksiyonu olan bir fonksiyon.
+- Bu yüzden onu generic bir extension fonksiyonu olarak oluşturuyoruz.
+- Burda oluşturduğumuz generic extension fonksiyonumuzun amacı fragment'larımızı tek bir container üzerinden test dosyalarımız üzerinden çağırıp ilgili test işlemlerini yaptırmak. 
+- Bu container'ımızın ismi de **launchFragmentHiltContainer** olarak tanımlıyoruz.
+- Biz sadece launchFragmentHiltContainer fonksiyonumuzun parametresine ek olarak **fragmentFactory'i parametresini de ekliyoruz ki fragmentler'de constructor injection kulanımını** sağlatmak.
+- Bu generic fonksiyon içerisindeki **fragmentFactory parametresi** sayesinde böylece fragmentlarımızda **constructor injection** kullanmamıza izin verir.
+
+### Gerçek Proje içerisinde([FragmentFactory.kt](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/main/java/com/example/shoppingtesting/ui/views/FragmentFactory.kt)) ve androidTest dosyamız([TestFragmentFactory.kt](https://github.com/halilkrkn/ShoppingTesting/blob/main/app/src/androidTest/java/com/example/shoppingtesting/ui/views/TestFragmentFactory.kt)) içerisindeki ui/views dosyamız içerisinde **FragmentFactory class'ı** oluşturuyoruz:
+- **Fragmentlarımızda constructor inject işlemini kullanabilmek için FragmentFactory class'ını oluşturuyoruz.**
+- Ve bu aslında sadece field inject olarak değil, bağımlılıkları constructor inject işlemini test etmeye gelince tercih edilen bir yoldur.
+- Yani eğer ilgili fragment'ımız constructor inject ile bir bağımlılığa sahipse bu tür fragmentlar içerisindeki durumlarda Fragmentlarımızı test edebilmek için bu yöntem tercih edilir.
+- Çünkü temelde sadece fragment'lar oluşturabilir ve constructor'da farklı bağımlılıkları geçirebiliriz. Ama bunu sadece fragmentlar üzerinden testlerini gerçekleştiremeyiz.
+- O yüzden fragmentlarımız üzerinde constructor inject ile bağımlılık varsa Fragmentlarımızı da test etmek istiyorsak Fragment Factory'ye ihtiyacımız var.
+- Kaynaklar:
+  - [Testing Fragment in isolation with FragmentFactory](https://medium.com/android-news/testing-fragment-in-isolation-with-fragmentfactory-d91c47ef6ed4)
+
+## KAPANIŞ
+- Öncelikle TEBRİKLER🤓 Buraya kadar sıkılmadan okuyup sizlere bir faydam olduysa ne mutlu bana.
+- Dediğim gibi öğrendiklerimi sizlere paylaşmaya çalıştım. 
+- Tabii eksiklerim yok mu tabii var ama internette derinlemesine böyle bir **Android Testing** alakalı derinlemesine her aşamanın **Unit Test-Integration Test-UI Test**'in bir arada olduğu bir şekilde anlatıldığı bir makale bulamadığım için bende böyle öğrendiklerimi Github üzerinden Medium makalesi tadında içerik oluşturmak istedim. 
+- Dediğim gibi umarım başarmışımdır. Sonuçta biraz bile olsa sizlere bu konu hakkında dokunmak bile bana yeter açıkçası🤓
+- ***Benim Tavsiyem projeyi eğer indirsenin branches'lar üzerinden takip edip kodları okuyup/incelemenizdir.*
+- **Android'de böylesine derinlemesine Testing öğrenmemde** vesile olan Youtube'da severek takip ettiğim ve alanında uzman denilebilecek seviyede içerikler oluşturan [Philipp Lackner](https://www.youtube.com/@PhilippLackner)'ı takip etmenizi şiddetle tavsiye ederim.
+- Eğer yok ben kod üzerinden öğrenemem diyorsanız benim bu Android'de Testing olayını öğrenmemde yardımcı olan Philipp Lackner'ın **Testing on Android** oynatma listesini izlemenizi/incelemenizi tavsiye ederim.
+- Tabi Youtube'da UI Testing ile ilgili önerdiğim [CodingWithMitch](https://www.youtube.com/@codingwithmitch/featured)'in [UI Testing for Beginners](https://www.youtube.com/playlist?list=PLgCYzUzKIBE_ZuZzgts135GuLQNX5eEPk) oynamtma listesini de tavsiye ederim.
+- Tabi ben bu Youtube Kanalları ile kalmadım Google'layarak detaya inmeye çalıştım. ilgili Kaynaklar:
+	- [Write Your First Unit Test in Android Using JUnit4 and Truth Assertion Library](https://medium.com/swlh/write-your-first-unit-test-in-android-using-junit4-and-truth-assertion-library-c1fa8d6b9402)
+	- [Fundamentals of testing Android apps](https://developer.android.com/training/testing/fundamentals)
+	- [Test-Driven Development Tutorial for Android: Getting Started](https://www.kodeco.com/7109-test-driven-development-tutorial-for-android-getting-started)
+	- [What to test in Android](https://developer.android.com/training/testing/fundamentals/what-to-test)
+	- [Use test doubles in Android](https://developer.android.com/training/testing/fundamentals/test-doubles)
+	- [Test Navigation](https://developer.android.com/guide/navigation/navigation-testing#kotlin)
+	- [Test your fragments](https://developer.android.com/guide/fragments/test)
+	- [Hilt testing guide](https://developer.android.com/training/dependency-injection/hilt-testing)
+	- [The definitive guide to test doubles on Android — Part 1: Theory](https://proandroiddev.com/the-definitive-guide-to-test-doubles-on-android-part-1-theory-5aa2bffb568c)
+	- [The definitive guide to test doubles on Android — Part 2: Practice](https://proandroiddev.com/the-definitive-guide-to-test-doubles-on-android-part-2-practice-fc9fb51276bb)
+	- [Testing With Hilt Tutorial: UI and Instrumentation Tests](https://www.kodeco.com/22152158-testing-with-hilt-tutorial-ui-and-instrumentation-tests#toc-anchor-012)
+	- [Testing in Android a Zero to Hero Tutorial -Part 1](https://medium.com/geekculture/testing-in-android-a-zero-to-hero-tutorial-part-1-b2f3a7a2b6b2)
+	- [Understanding Unit Tests for Android in 2021](https://proandroiddev.com/understanding-unit-tests-for-android-in-2021-71984f370240)
+	- [Test-Driven Development with Android](https://www.wwt.com/article/test-driven-development-with-android)
+	- [Unit Testing Kotlin Flow](https://medium.com/google-developer-experts/unit-testing-kotlin-flow-76ea5f4282c5)
+	- [Testing Android Applications](https://medium.com/kayvan-kaseb/testing-android-applications-b95a4a72f2f9)
+	- [Android Local Unit Test Yazımı](https://halil-ozcan.medium.com/android-local-unit-test-yaz%C4%B1m%C4%B1-a0749f0385f6)
+	- [Android'de Unit Test, Integration Test, UI Test](https://www.mobiler.dev/post/android-testing-examples)
+	- [Android Unit Test -Neden Gerekli](https://medium.com/@evrenay/android-unit-test-neden-gerekli-c3eb277a7d83)
+	- [Unit Testing with Mockito on Kotlin Android Project with Architecture Components](https://marco-cattaneo.medium.com/unit-testing-with-mockito-on-kotlin-android-project-with-architecture-components-2059eb637912)
+	- [UI Testing with Espresso in Android Studio](https://www.geeksforgeeks.org/ui-testing-with-espresso-in-android-studio/)
+	- [Barista — Enjoyable Espresso Android UI Tests](https://itnext.io/barista-enjoyable-espresso-android-ui-tests-59d1620bd99c)
+	- [Unit-testing LiveData and other common observability problems](https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04)
+	- [Testing with Hilt android](https://nyamebismark12-nb.medium.com/testing-with-hilt-android-b299c4ff9f9d)
+	- [Hilt - Unit Tests](https://stackoverflow.com/questions/71723756/hilt-unit-tests)
+	- [Testing with Google Truth](https://www.baeldung.com/google-truth)
+	- [Truth - Fluent assertions for Java and Android](https://truth.dev/)
+
+
+
 
 
